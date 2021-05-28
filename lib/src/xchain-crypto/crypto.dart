@@ -7,3 +7,9 @@ String generateMnemonic({int size = 12}) {
   var mnemonic = bip39.generateMnemonic(strength: entropy);
   return mnemonic;
 }
+
+bool validateMnemonic(String mnemonic) {
+  bool result = bip39.validateMnemonic(mnemonic);
+
+  return result;
+}
