@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:test/test.dart';
-import 'package:xchaindart/src/xchain-crypto/crypto.dart';
+import 'package:xchaindart/src/xchain_crypto/crypto.dart';
 
 void main() {
   group('generate mnemonic (BIP39)', () {
