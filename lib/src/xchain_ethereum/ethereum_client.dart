@@ -5,14 +5,23 @@ class EthereumClient implements XChainClient {
   late String address;
 
   @override
-  Network network;
+  late String network;
 
   @override
-  String seed;
+  late bool readOnlyClient;
 
-  EthereumClient(this.seed, [this.network = Network.mainnet]) {
+  @override
+  late String seed;
+
+  EthereumClient(this.seed, [this.network = 'mainnet']) {
+    readOnlyClient = false;
     int walletIndex = 0;
     address = getAddress(walletIndex);
+  }
+
+  EthereumClient.readonly(this.address, [this.network = 'mainnet']) {
+    readOnlyClient = true;
+    address = this.address;
   }
 
   @override
@@ -21,9 +30,9 @@ class EthereumClient implements XChainClient {
       throw ('index must be greater than zero');
     }
     // address = this.hdNode.derivePath(this.getFullDerivationPath(index));
-    address = "0xEFff51aa65B8AE49a2F2Fe3b941c79bB23Fd0AF4";
+    address = "0xb8c0c226d6FE17E5d9132741836C3ae82A5B6C4E";
     if (walletIndex == 1) {
-      address = "0x9b39aF85c2973bd52fF3DCc424E2f02E9D7606Bc";
+      address = "0x1804137641b5CB781226b361976F15B4067ee0F9";
     }
     return address;
   }

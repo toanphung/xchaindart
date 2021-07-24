@@ -1,14 +1,10 @@
-enum Network {
-  testnet,
-  mainnet,
-}
-
 abstract class XChainClient {
-  Network network;
-  String seed;
   late String address;
+  late String network;
+  late bool readOnlyClient;
+  late String seed;
 
-  XChainClient(this.seed, [this.network = Network.mainnet]);
+  XChainClient([this.network = 'mainnet']);
 
   getAddress(walletIndex) {}
 

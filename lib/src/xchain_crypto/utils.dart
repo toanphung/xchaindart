@@ -1,26 +1,20 @@
-enum Chain {
-  BNB,
-  BTC,
-  ETH,
-  THOR,
-  GAIA,
-  POLKA,
-  BCH,
-  LTC,
-}
+// Create address from the public key.
+substractAddress(String source) {
+  String address;
 
-identifyChain(String source) {
+  // start with empty list
+  List<Address> addresses = [];
+
   // If source is empty or null
   if (source.isEmpty) {
-    return 'Input is empty';
+    throw ArgumentError('Input is empty');
   }
 
   // matches on spaces
   RegExp regExpSpaces = new RegExp(r' ');
   bool hasIllegalChars = regExpSpaces.hasMatch(source);
-
   if (hasIllegalChars) {
-    return "Illegal character";
+    throw ArgumentError('Illegal character');
   }
 
   // starts with chain prefix
@@ -28,57 +22,52 @@ identifyChain(String source) {
   bool hasPrefix = regExpPrefix.hasMatch(source);
 
   if (hasPrefix) {
-    var regex2 = RegExp(r'^(.+):(.+)');
+    RegExp regex2 = RegExp(r'^(.+):(.+)');
     var matches2 = regex2.firstMatch(source);
-    var prefix = matches2!.group(1);
-    // var address = matches2!.group(2);
-    var chain = checkPrefix(prefix);
-    if (chain != null) {
-      return '$chain';
+    String? prefix = matches2!.group(1);
+    if (prefix == 'bitcoin' || prefix == 'ethereum') {
+      address = matches2.group(2)!;
     } else {
-      return 'unknown chain prefix';
+      throw ArgumentError('Unsupported chain prefix');
     }
+  } else {
+    address = source;
   }
-  if (!hasPrefix) {
-    var regex3 = RegExp(r'^(.+)');
-    var matches2 = regex3.firstMatch(source);
-    var address = matches2!.group(1);
-    var chain = checkAddress(address);
-    if (chain != null) {
-      return '$chain';
-    } else {
-      return 'unknown chain prefix';
-    }
-  }
+
+  // identify chain and assets
+  addresses = _identifyChain(address);
+
+  return addresses;
 }
 
-checkAddress(String? address) {
+_identifyChain(String? address) {
+  List<Address> _addresses = [];
+
   // Bitcoin Legacy address starts with 1 and has 34 or less characters
   if (address!.startsWith(new RegExp(r'(^1[A-z,0-9]{33})'))) {
-    return Chain.BTC;
+    _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
   }
   // Bitcoin Segwit address starts with 3 and has 34 characters
-  if (address.startsWith(new RegExp(r'(^3[A-z,0-9]{33})'))) {
-    return Chain.BTC;
+  else if (address.startsWith(new RegExp(r'(^3[A-z,0-9]{33})'))) {
+    _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
   }
   // Bitcoin Native-Segwit address starts with bc1 and has 42 characters
-  if (address.startsWith(new RegExp(r'(^bc1[A-z,0-9]{39})'))) {
-    return Chain.BTC;
+  else if (address.startsWith(new RegExp(r'(^bc1[A-z,0-9]{39})'))) {
+    _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
   }
   // Ethereum address starts with 0x and has 42 characters
-  if (address.startsWith(new RegExp(r'(^0x[A-z,0-9]{40})'))) {
-    return Chain.ETH;
+  else if (address.startsWith(new RegExp(r'(^0x[A-z,0-9]{40})'))) {
+    _addresses.add(Address(address, 'ETH:ETH', 'mainnet'));
   } else {
-    return null;
+    throw ArgumentError('Unsupported chain');
   }
+  return _addresses;
 }
 
-Chain? checkPrefix(String? prefix) {
-  if (prefix == 'bitcoin') {
-    return Chain.BTC;
-  } else if (prefix == 'ethereum') {
-    return Chain.ETH;
-  } else {
-    return null;
-  }
+class Address {
+  String address;
+  String asset;
+  String networkType;
+
+  Address(this.address, this.asset, this.networkType);
 }

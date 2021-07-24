@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
-import 'package:xchaindart/src/xchain_ethereum/ethereum_client.dart';
 import 'package:xchaindart/src/xchain_client/xchain_client.dart';
+import 'package:xchaindart/src/xchain_ethereum/ethereum_client.dart';
 
 void main() {
   const phrase =
@@ -17,14 +17,17 @@ void main() {
       phrase,
     );
 
+    test('check if the readOnlyClient flag is set', () {
+      expect(client.readOnlyClient, false);
+    });
     test('get default network', () {
       var networkType = client.getNetwork();
-      expect(networkType, Network.mainnet);
+      expect(networkType, 'mainnet');
     });
     test('set testnet network', () {
-      client.setNetwork(Network.testnet);
+      client.setNetwork('testnet');
       var networkType = client.getNetwork();
-      expect(networkType, Network.testnet);
+      expect(networkType, 'testnet');
     });
     test('set phrase', () {
       String address = client.setPhrase(phrase, 0);
@@ -41,5 +44,17 @@ void main() {
     });
   });
 
-  group('querying', () {});
+  group('ethereum-lite-client', () {
+    XChainClient client = new EthereumClient.readonly(addrPath0);
+    test('check if the readOnlyClient flag is set', () {
+      expect(client.readOnlyClient, true);
+    });
+    test('check if address is set on creation', () {
+      expect(client.address, addrPath0);
+    });
+    test('check balance', () {
+      List balances = client.getBalance(addrPath0, 'ETH:ETH');
+      expect(balances[0]['amount'], 100000000);
+    });
+  });
 }
