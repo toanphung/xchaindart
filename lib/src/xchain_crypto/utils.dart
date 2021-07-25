@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+
 // Create address from the public key.
 substractAddress(String source) {
   String address;
@@ -70,4 +72,21 @@ class Address {
   String networkType;
 
   Address(this.address, this.asset, this.networkType);
+}
+
+class NetworkHelper {
+  Future getData(String uri, [Map<String, String>? header]) async {
+    print('uri: $uri');
+    print('header: $header');
+    var url = Uri.parse(uri);
+    http.Response response = await http.get(url, headers: header);
+    if (response.statusCode == 200) {
+      String data = response.body;
+      print('body: $data');
+      return data;
+    } else {
+      print(response.statusCode);
+      throw 'Problem with the get request';
+    }
+  }
 }

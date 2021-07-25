@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:xchaindart/src/xchain_client/xchain_client.dart';
+
+import '../../xchaindart.dart';
 
 class EthereumClient implements XChainClient {
   @override
@@ -38,10 +42,33 @@ class EthereumClient implements XChainClient {
   }
 
   @override
-  getBalance(address, assets) {
-    List balances = [
-      {'asset': 'ETH:ETH', 'amount': 100000000}
-    ];
+  getBalance(address, assets) async {
+    List balances = [];
+    //default ethereum explorer
+    String uri = 'https://api.ethplorer.io';
+    if (network == 'mainnet') {
+      uri = 'https://api.ethplorer.io';
+    } else if (network == 'testnet') {
+      uri = 'https://ropsten.etherscan.io';
+    } else {
+      throw ArgumentError('Unsupported network');
+    }
+
+    NetworkHelper networkHelper = NetworkHelper();
+    String responseBody = await networkHelper
+        .getData('$uri/getAddressInfo/$address?apiKey=freekey');
+    var rawAmount = jsonDecode(responseBody)['ETH']['rawBalance'];
+
+    balances.add({'asset': 'ETH:ETH', 'amount': int.parse(rawAmount)});
+
+    var tokens = jsonDecode(responseBody)['tokens'];
+
+    for (var token in tokens) {
+      String symbol = token['tokenInfo']['symbol'];
+      String rawAmount = token['rawBalance'];
+      balances.add({'asset': 'ETH:$symbol', 'amount': int.parse(rawAmount)});
+    }
+
     return balances;
   }
 
