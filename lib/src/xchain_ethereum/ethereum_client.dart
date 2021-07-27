@@ -17,6 +17,9 @@ class EthereumClient implements XChainClient {
   @override
   late String seed;
 
+  /// It's not recommended to use freekey in a product mode.
+  static const apiKey = 'freekey';
+
   EthereumClient(this.seed, [this.network = 'mainnet']) {
     readOnlyClient = false;
     int walletIndex = 0;
@@ -44,47 +47,48 @@ class EthereumClient implements XChainClient {
   @override
   getBalance(address, assets) async {
     List balances = [];
-    //default ethereum explorer
-    String uri = 'https://api.ethplorer.io';
-    if (network == 'mainnet') {
-      uri = 'https://api.ethplorer.io';
-    } else if (network == 'testnet') {
-      uri = 'https://ropsten.etherscan.io';
-    } else {
-      throw ArgumentError('Unsupported network');
-    }
 
+    String uri = '${getExplorerAddressUrl(address)}?apiKey=$apiKey';
     NetworkHelper networkHelper = NetworkHelper();
-    String responseBody = await networkHelper
-        .getData('$uri/getAddressInfo/$address?apiKey=freekey');
-    var rawAmount = jsonDecode(responseBody)['ETH']['rawBalance'];
 
-    balances.add({'asset': 'ETH:ETH', 'amount': int.parse(rawAmount)});
+    String responseBody = await networkHelper.getData(uri);
+    num amount = jsonDecode(responseBody)['ETH']['balance'];
+    if (amount != null) {
+      balances.add({'asset': 'ETH:ETH', 'amount': amount});
+    }
 
     var tokens = jsonDecode(responseBody)['tokens'];
-
-    for (var token in tokens) {
-      String symbol = token['tokenInfo']['symbol'];
-      String rawAmount = token['rawBalance'];
-      balances.add({'asset': 'ETH:$symbol', 'amount': int.parse(rawAmount)});
+    if (tokens != null) {
+      for (var token in tokens) {
+        String symbol = token['tokenInfo']['symbol'];
+        num amount = token['balance'];
+        if (amount != null) {
+          balances.add({'asset': 'ETH:$symbol', 'amount': amount});
+        }
+      }
     }
-
     return balances;
   }
 
   @override
   getExplorerAddressUrl(address) {
-    return "https://blockchair.com/bitcoin/address/19iqYbeATe4RxghQZJnYVFU4mjUUu76EA6";
+    return '${this.getExplorerUrl()}/getAddressInfo/${address}';
   }
 
   @override
   getExplorerTransactionUrl(txId) {
-    return "https://blockchair.com/bitcoin/transaction/d11ff3352c50b1f5c8e2030711702a2071ca0e65457b40e6e0bcbea99e5dc82e";
+    return '${this.getExplorerUrl()}/getTxInfo/${txId}';
   }
 
   @override
   getExplorerUrl() {
-    return "https://blockchair.com/bitcoin/";
+    if (network == 'mainnet') {
+      return 'https://api.ethplorer.io';
+    } else if (network == 'testnet') {
+      return 'https://kovan-api.ethplorer.io';
+    } else {
+      throw ArgumentError('Unsupported network');
+    }
   }
 
   @override

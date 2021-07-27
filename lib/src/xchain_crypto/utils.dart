@@ -76,13 +76,13 @@ class Address {
 
 class NetworkHelper {
   Future getData(String uri, [Map<String, String>? header]) async {
-    print('uri: $uri');
-    print('header: $header');
+    // print('uri: $uri');
+    // print('header: $header');
     var url = Uri.parse(uri);
     http.Response response = await http.get(url, headers: header);
     if (response.statusCode == 200) {
       String data = response.body;
-      print('body: $data');
+      // print('body: $data');
       return data;
     } else {
       print(response.statusCode);
