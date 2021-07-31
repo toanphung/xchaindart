@@ -1,20 +1,20 @@
 import 'package:test/test.dart';
-import 'package:xchaindart/src/xchain_bitcoin/bitcoin_client.dart';
 import 'package:xchaindart/src/xchain_client/xchain_client.dart';
+import 'package:xchaindart/src/xchain_litecoin/litecoin_client.dart';
 
 void main() {
   const phrase =
       'canyon throw labor waste awful century ugly they found post source draft';
   // https://iancoleman.io/bip39/
   // m/44'/0'/0'/0/0
-  const addrPath0 = '12tSpVdC9CAwod9CFaw33JL9o7JngpE2pJ';
+  const addrPath0 = 'LRXrGoPaJGuiJ8N4hgu2uYLihoHKkomkqs';
   // m/44'/0'/0'/0/1
-  const addrPath1 = '19LQH9PSE35u15kLYTgyjdCo2SBTLn4xhM';
-  // satoshis address
-  const addrPathX = '1HLoD9E4SDFFPDiYfNYnkBLQ85Y51J3Zb1';
+  const addrPath1 = 'LfH5fgQdMEqjq3R3xkXqWZRjktNBJHVf4w';
+  // random address
+  const addrPathX = 'Lf1kns7hHXrpVcjUdw1MvHXd6DXHRRYmRo';
 
   group('config and setup', () {
-    XChainClient client = new BitcoinClient(
+    XChainClient client = new LitecoinClient(
       phrase,
     );
 
@@ -32,11 +32,11 @@ void main() {
     });
     test('set phrase', () {
       String address = client.setPhrase(phrase, 0);
-      expect(address, "12tSpVdC9CAwod9CFaw33JL9o7JngpE2pJ");
+      expect(address, addrPath0);
     });
   });
-  group('bitcoin-client', () {
-    XChainClient client = new BitcoinClient(phrase);
+  group('litecoin-client', () {
+    XChainClient client = new LitecoinClient(phrase);
     test('check valid address on creation', () {
       expect(client.address, addrPath0);
     });
@@ -45,8 +45,8 @@ void main() {
     });
   });
 
-  group('empty bitcoin-lite-client', () {
-    XChainClient client = new BitcoinClient.readonly(addrPath0);
+  group('empty litecoin-lite-client', () {
+    XChainClient client = new LitecoinClient.readonly(addrPath0);
     test('check if the readOnlyClient flag is set', () {
       expect(client.readOnlyClient, true);
     });
@@ -54,14 +54,14 @@ void main() {
       expect(client.address, addrPath0);
     });
     test('check balance', () async {
-      List balances = await client.getBalance(addrPath0, 'BTC:BTC');
+      List balances = await client.getBalance(addrPath0, 'LTC:LTC');
       expect(balances.length, 1);
       expect(balances.first['amount'], 0.0);
     });
   });
 
-  group('non-empty bitcoin-lite-client', () {
-    XChainClient client = new BitcoinClient.readonly(addrPathX);
+  group('non-empty litecoin-lite-client', () {
+    XChainClient client = new LitecoinClient.readonly(addrPathX);
     test('check if the readOnlyClient flag is set', () {
       expect(client.readOnlyClient, true);
     });
@@ -69,13 +69,13 @@ void main() {
       expect(client.address, addrPathX);
     });
     test('check balance', () async {
-      List balances = await client.getBalance(addrPathX, 'BTC:BTC');
+      List balances = await client.getBalance(addrPathX, 'LTC:LTC');
       expect(balances.length, equals(1));
-      expect(balances.first['amount'], greaterThan(0.01597));
+      expect(balances.first['amount'], 0.12);
     });
   });
 
-  // group('non-empty testnet ethereum-lite-client', () {
+  // group('non-empty testnet litecoin-lite-client', () {
   //   XChainClient client = new EthereumClient.readonly(addrPath0, 'testnet');
   //   test('check if the readOnlyClient flag is set', () {
   //     expect(client.readOnlyClient, true);

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:xchaindart/src/xchain_client/xchain_client.dart';
 
@@ -54,16 +55,31 @@ class EthereumClient implements XChainClient {
     String responseBody = await networkHelper.getData(uri);
     num amount = jsonDecode(responseBody)['ETH']['balance'];
     if (amount != null) {
-      balances.add({'asset': 'ETH:ETH', 'amount': amount});
+      balances.add({
+        'asset': 'ETH:ETH',
+        'amount': amount,
+        'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png'
+      });
     }
 
     var tokens = jsonDecode(responseBody)['tokens'];
     if (tokens != null) {
       for (var token in tokens) {
         String symbol = token['tokenInfo']['symbol'];
-        num amount = token['balance'];
+        String? image = token['tokenInfo']['image'];
+        String imageUrl =
+            'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png';
+        if (image != null) {
+          imageUrl = 'https://ethplorer.io$image';
+        }
+
+        num balance = token['balance'];
+        num decimals = int.parse(token['tokenInfo']['decimals']);
+        num amount = balance / pow(10, decimals);
+
         if (amount != null) {
-          balances.add({'asset': 'ETH:$symbol', 'amount': amount});
+          balances.add(
+              {'asset': 'ETH:$symbol', 'amount': amount, 'image': imageUrl});
         }
       }
     }

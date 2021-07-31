@@ -49,13 +49,22 @@ _identifyChain(String? address) {
   if (address!.startsWith(new RegExp(r'(^1[A-z,0-9]{33})'))) {
     _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
   }
-  // Bitcoin Segwit address starts with 3 and has 34 characters
+  // Bitcoin & Litecoin Segwit address starts with 3 and has 34 characters
   else if (address.startsWith(new RegExp(r'(^3[A-z,0-9]{33})'))) {
+    _addresses.add(Address(address, 'LTC:LTC', 'mainnet'));
     _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
   }
   // Bitcoin Native-Segwit address starts with bc1 and has 42 characters
   else if (address.startsWith(new RegExp(r'(^bc1[A-z,0-9]{39})'))) {
     _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
+  }
+  // Litecoin address starts with L and has 34 or less characters
+  else if (address.startsWith(new RegExp(r'(^L[A-z,0-9]{33})'))) {
+    _addresses.add(Address(address, 'LTC:LTC', 'mainnet'));
+  }
+  // Litecoin address starts with ltc and has 43 or less characters
+  else if (address.startsWith(new RegExp(r'(^ltc[A-z,0-9]{40})'))) {
+    _addresses.add(Address(address, 'LTC:LTC', 'mainnet'));
   }
   // Ethereum address starts with 0x and has 42 characters
   else if (address.startsWith(new RegExp(r'(^0x[A-z,0-9]{40})'))) {

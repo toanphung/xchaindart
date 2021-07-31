@@ -4,7 +4,7 @@ import 'package:xchaindart/src/xchain_client/xchain_client.dart';
 
 import '../../xchaindart.dart';
 
-class BitcoinClient implements XChainClient {
+class LitecoinClient implements XChainClient {
   @override
   late String address;
 
@@ -17,13 +17,13 @@ class BitcoinClient implements XChainClient {
   @override
   late String seed;
 
-  BitcoinClient(this.seed, [this.network = 'mainnet']) {
+  LitecoinClient(this.seed, [this.network = 'mainnet']) {
     readOnlyClient = false;
     int walletIndex = 0;
     address = getAddress(walletIndex);
   }
 
-  BitcoinClient.readonly(this.address, [this.network = 'mainnet']) {
+  LitecoinClient.readonly(this.address, [this.network = 'mainnet']) {
     readOnlyClient = true;
     address = this.address;
   }
@@ -34,9 +34,9 @@ class BitcoinClient implements XChainClient {
       throw ('index must be greater than zero');
     }
     // address = this.hdNode.derivePath(this.getFullDerivationPath(index));
-    address = "12tSpVdC9CAwod9CFaw33JL9o7JngpE2pJ";
+    address = "LRXrGoPaJGuiJ8N4hgu2uYLihoHKkomkqs";
     if (walletIndex == 1) {
-      address = "19LQH9PSE35u15kLYTgyjdCo2SBTLn4xhM";
+      address = "LfH5fgQdMEqjq3R3xkXqWZRjktNBJHVf4w";
     }
     return address;
   }
@@ -49,35 +49,32 @@ class BitcoinClient implements XChainClient {
     NetworkHelper networkHelper = NetworkHelper();
 
     String responseBody = await networkHelper.getData(uri);
-    num funded = jsonDecode(responseBody)['chain_stats']['funded_txo_sum'];
-    num spend = jsonDecode(responseBody)['chain_stats']['spent_txo_sum'];
-    num amount = (funded - spend) / 100000000;
-    if (amount != null) {
-      balances.add({
-        'asset': 'BTC:BTC',
-        'amount': amount,
-        'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png'
-      });
+    String amountString = jsonDecode(responseBody)['data']['confirmed_balance'];
+
+    if (amountString != null || amountString != '') {
+      num amount = double.parse(amountString);
+      balances.add({'asset': 'LTC:LTC', 'amount': amount, 'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png'});
     }
     return balances;
   }
 
   @override
   getExplorerAddressUrl(address) {
-    return '${this.getExplorerUrl()}/address/${address}';
+    return '${this.getExplorerUrl()}/get_address_balance/LTC/${address}';
   }
 
   @override
   getExplorerTransactionUrl(txId) {
-    return '${this.getExplorerUrl()}/tx/${txId}';
+    return '${this.getExplorerUrl()}/get_tx/LTC/${txId}';
   }
 
   @override
   getExplorerUrl() {
     if (network == 'mainnet') {
-      return 'https://blockstream.info/api';
+      return 'https://chain.so/api/v2';
     } else if (network == 'testnet') {
-      return 'https://blockstream.info/testnet/api';
+      // testnet url does not work atm
+      return 'https://chain.so/api/v2';
     } else {
       throw ArgumentError('Unsupported network');
     }
@@ -170,7 +167,7 @@ class BitcoinClient implements XChainClient {
 
   @override
   setPhrase(mnemonic, walletIndex) {
-    address = "12tSpVdC9CAwod9CFaw33JL9o7JngpE2pJ";
+    address = "LRXrGoPaJGuiJ8N4hgu2uYLihoHKkomkqs";
     return address;
   }
 
