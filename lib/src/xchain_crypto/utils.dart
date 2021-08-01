@@ -26,37 +26,53 @@ substractAddress(String source) {
   if (hasPrefix) {
     RegExp regex2 = RegExp(r'^(.+):(.+)');
     var matches2 = regex2.firstMatch(source);
-    String? prefix = matches2!.group(1);
-    if (prefix == 'bitcoin' || prefix == 'ethereum') {
+    String prefix = matches2!.group(1)!;
+    if (prefix == 'bitcoin' ||
+        prefix == 'bitcoincash' ||
+        prefix == 'ethereum') {
       address = matches2.group(2)!;
+      // identify chain and assets
+      addresses = _identifyChain(address, prefix);
     } else {
       throw ArgumentError('Unsupported chain prefix');
     }
   } else {
     address = source;
+    // identify chain and assets
+    addresses = _identifyChain(address);
   }
-
-  // identify chain and assets
-  addresses = _identifyChain(address);
 
   return addresses;
 }
 
-_identifyChain(String? address) {
+_identifyChain(String address, [String? prefix]) {
   List<Address> _addresses = [];
 
+  if (prefix == 'bitcoin') {
+    _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
+  } else if (prefix == 'bitcoincash') {
+    _addresses.add(Address(address, 'BCH:BCH', 'mainnet'));
+  } else if (prefix == 'ethereum') {
+    _addresses.add(Address(address, 'ETH:ETH', 'mainnet'));
+  }
+
   // Bitcoin Legacy address starts with 1 and has 34 or less characters
-  if (address!.startsWith(new RegExp(r'(^1[A-z,0-9]{33})'))) {
+  else if (address.startsWith(new RegExp(r'(^1[A-z,0-9]{33})'))) {
+    _addresses.add(Address(address, 'BCH:BCH', 'mainnet'));
     _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
   }
   // Bitcoin & Litecoin Segwit address starts with 3 and has 34 characters
   else if (address.startsWith(new RegExp(r'(^3[A-z,0-9]{33})'))) {
-    _addresses.add(Address(address, 'LTC:LTC', 'mainnet'));
     _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
+    _addresses.add(Address(address, 'LTC:LTC', 'mainnet'));
   }
   // Bitcoin Native-Segwit address starts with bc1 and has 42 characters
   else if (address.startsWith(new RegExp(r'(^bc1[A-z,0-9]{39})'))) {
     _addresses.add(Address(address, 'BTC:BTC', 'mainnet'));
+  }
+  // Bitcoin Cash address starts with q and has 42 characters
+  else if (address.startsWith(new RegExp(r'(^q[A-z,0-9]{41})'))) {
+    _addresses.add(Address(address, 'BCH:BCH', 'mainnet'));
   }
   // Litecoin address starts with L and has 34 or less characters
   else if (address.startsWith(new RegExp(r'(^L[A-z,0-9]{33})'))) {

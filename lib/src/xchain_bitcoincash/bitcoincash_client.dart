@@ -49,7 +49,6 @@ class BitcoinCashClient implements XChainClient {
     NetworkHelper networkHelper = NetworkHelper();
 
     String responseBody = await networkHelper.getData(uri);
-    print(responseBody);
     num funded =
         jsonDecode(responseBody)['data'][address]['address']['received'];
     num spend = jsonDecode(responseBody)['data'][address]['address']['spent'];

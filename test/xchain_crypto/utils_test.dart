@@ -33,6 +33,16 @@ void main() {
     expect(addresses.first.networkType, 'mainnet');
   });
 
+  test('starts with bitcoin cash chain prefix', () {
+    String source = 'bitcoincash:qpl4lfjq7emfg8p4akr6p27dap5duj35zcc82aqul5';
+    List<Address> addresses = substractAddress(source);
+    expect(addresses.length, 1);
+    expect(
+        addresses.first.address, 'qpl4lfjq7emfg8p4akr6p27dap5duj35zcc82aqul5');
+    expect(addresses.first.asset, 'BCH:BCH');
+    expect(addresses.first.networkType, 'mainnet');
+  });
+
   test('starts with ethereum chain prefix', () {
     String source = 'ethereum:0xC52A857FDa38994CB6CC8e0DE2AEDD67a7353e0d';
     List<Address> addresses = substractAddress(source);
@@ -57,18 +67,20 @@ void main() {
   test('bitcoin legacy address without chain prefix', () {
     String source = '16we9adsewmBDKv5CSgeRMZPo3RadcgVZV';
     List<Address> addresses = substractAddress(source);
-    expect(addresses.length, 1);
+    expect(addresses.length, 2);
     expect(addresses.first.address, '16we9adsewmBDKv5CSgeRMZPo3RadcgVZV');
-    expect(addresses.first.asset, 'BTC:BTC');
+    expect(addresses[0].asset, 'BCH:BCH');
+    expect(addresses[1].asset, 'BTC:BTC');
     expect(addresses.first.networkType, 'mainnet');
   });
 
   test('bitcoin segwit address without chain prefix', () {
     String source = '3QaesQ25kJc4tyCQM5wJ54ky39DNsUMx7Z';
     List<Address> addresses = substractAddress(source);
-    expect(addresses.length, 1);
+    expect(addresses.length, 2);
     expect(addresses.first.address, '3QaesQ25kJc4tyCQM5wJ54ky39DNsUMx7Z');
-    expect(addresses.first.asset, 'BTC:BTC');
+    expect(addresses[0].asset, 'BTC:BTC');
+    expect(addresses[1].asset, 'LTC:LTC');
     expect(addresses.first.networkType, 'mainnet');
   });
 
