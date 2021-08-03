@@ -89,7 +89,6 @@ class EthereumClient implements XChainClient {
         }
         num decimals = int.parse(decimalString);
         num amount = balance / pow(10, decimals);
-        print('balance: $amount');
 
         if (amount != null) {
           balances.add(

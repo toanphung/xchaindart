@@ -29,6 +29,7 @@ substractAddress(String source) {
     String prefix = matches2!.group(1)!;
     if (prefix == 'bitcoin' ||
         prefix == 'bitcoincash' ||
+        prefix == 'binance' ||
         prefix == 'ethereum') {
       address = matches2.group(2)!;
       // identify chain and assets
@@ -54,6 +55,8 @@ _identifyChain(String address, [String? prefix]) {
     _addresses.add(Address(address, 'BCH:BCH', 'mainnet'));
   } else if (prefix == 'ethereum') {
     _addresses.add(Address(address, 'ETH:ETH', 'mainnet'));
+  } else if (prefix == 'binance') {
+    _addresses.add(Address(address, 'BNB:BNB', 'mainnet'));
   }
 
   // Binance address starts with bnb and has 42 characters

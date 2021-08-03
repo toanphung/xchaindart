@@ -64,6 +64,15 @@ void main() {
     }
   });
 
+  test('starts with binance chain prefix', () {
+    String source = 'binance:bnb1vxyxxkqdke8r55r6fzhprtj8qwgecudj0h5svr';
+    List<Address> addresses = substractAddress(source);
+    expect(
+        addresses.first.address, 'bnb1vxyxxkqdke8r55r6fzhprtj8qwgecudj0h5svr');
+    expect(addresses.first.asset, 'BNB:BNB');
+    expect(addresses.first.networkType, 'mainnet');
+  });
+
   test('bitcoin legacy address without chain prefix', () {
     String source = '16we9adsewmBDKv5CSgeRMZPo3RadcgVZV';
     List<Address> addresses = substractAddress(source);
@@ -103,8 +112,8 @@ void main() {
     expect(addresses.first.networkType, 'mainnet');
   });
 
-  test('unsupported chain DogeCoin', () {
-    String source = 'DJXPYa2aYizxXfhcEcmom1xuEyZLF6DX5b';
+  test('unsupported Chain address', () {
+    String source = 'AJXPYa2aYizxXfhcEcmom1xuEyZLF6DX5b';
     List<Address> addresses = [];
     try {
       addresses = substractAddress(source);
