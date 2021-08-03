@@ -1,5 +1,6 @@
 library xchaindart;
 
+export 'src/xchain_binance/binance_client.dart';
 export 'src/xchain_bitcoin/bitcoin_client.dart';
 export 'src/xchain_bitcoincash/bitcoincash_client.dart';
 export 'src/xchain_client/xchain_client.dart';

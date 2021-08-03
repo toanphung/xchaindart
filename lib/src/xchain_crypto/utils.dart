@@ -56,6 +56,14 @@ _identifyChain(String address, [String? prefix]) {
     _addresses.add(Address(address, 'ETH:ETH', 'mainnet'));
   }
 
+  // Binance address starts with bnb and has 42 characters
+  else if (address.startsWith(new RegExp(r'(^bnb[A-z,0-9]{39})'))) {
+    _addresses.add(Address(address, 'BNB:BNB', 'mainnet'));
+  }
+  // Binance testnet address starts with tbnb and has 42 characters
+  else if (address.startsWith(new RegExp(r'(^tbnb[A-z,0-9]{39})'))) {
+    _addresses.add(Address(address, 'BNB:BNB', 'testnet'));
+  }
   // Bitcoin Legacy address starts with 1 and has 34 or less characters
   else if (address.startsWith(new RegExp(r'(^1[A-z,0-9]{33})'))) {
     _addresses.add(Address(address, 'BCH:BCH', 'mainnet'));
