@@ -65,17 +65,31 @@ class EthereumClient implements XChainClient {
     var tokens = jsonDecode(responseBody)['tokens'];
     if (tokens != null) {
       for (var token in tokens) {
-        String symbol = token['tokenInfo']['symbol'];
+        String? symbol = token['tokenInfo']['symbol'];
         String? image = token['tokenInfo']['image'];
         String imageUrl =
             'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png';
+        // some tokens do not have an image field
         if (image != null) {
           imageUrl = 'https://ethplorer.io$image';
         }
+        // some tokens do not have a symbol field
+        if (symbol == null) {
+          symbol = '???';
+        }
 
-        num balance = token['balance'];
-        num decimals = int.parse(token['tokenInfo']['decimals']);
+        num? balance = token['balance'];
+        if (balance == null) {
+          balance = 0.0;
+        }
+        String? decimalString = token['tokenInfo']['decimals'];
+        // some tokens do not have a decimal field
+        if (decimalString == null) {
+          decimalString = '0';
+        }
+        num decimals = int.parse(decimalString);
         num amount = balance / pow(10, decimals);
+        print('balance: $amount');
 
         if (amount != null) {
           balances.add(

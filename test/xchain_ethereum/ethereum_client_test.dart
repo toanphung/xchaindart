@@ -71,7 +71,7 @@ void main() {
     test('check balance', () async {
       List balances = await client.getBalance(addrPathX, 'ETH:ETH');
       expect(balances.length, greaterThan(1));
-      expect(balances.first['amount'], 0.027532380546738943);
+      expect(balances.first['amount'], greaterThan(0.0));
     });
   });
 
