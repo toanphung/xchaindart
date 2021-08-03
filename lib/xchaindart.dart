@@ -7,3 +7,4 @@ export 'src/xchain_crypto/crypto.dart';
 export 'src/xchain_crypto/utils.dart';
 export 'src/xchain_ethereum/ethereum_client.dart';
 export 'src/xchain_litecoin/litecoin_client.dart';
+export 'src/xchain_thorchain/thorchain_client.dart';

@@ -85,6 +85,14 @@ _identifyChain(String address, [String? prefix]) {
   // Ethereum address starts with 0x and has 42 characters
   else if (address.startsWith(new RegExp(r'(^0x[A-z,0-9]{40})'))) {
     _addresses.add(Address(address, 'ETH:ETH', 'mainnet'));
+  }
+  // Thorchain address starts with thor and has 43 characters
+  else if (address.startsWith(new RegExp(r'(^thor[A-z,0-9]{39})'))) {
+    _addresses.add(Address(address, 'RUNE:RUNE', 'mainnet'));
+  }
+  // Thorchain testnet address starts with tthor and has 44 characters
+  else if (address.startsWith(new RegExp(r'(^tthor[A-z,0-9]{39})'))) {
+    _addresses.add(Address(address, 'RUNE:RUNE', 'testnet'));
   } else {
     throw ArgumentError('Unsupported chain');
   }
