@@ -16,8 +16,8 @@ dependencies:
   http: ^0.13.3
   pointycastle: ^3.1.2
   uuid: ^3.0.1
-  bitcoin_flutter:
-    path: ../bitcoin_flutter
+  #bitcoin_flutter:
+  #  path: ../bitcoin_flutter
 
 dependency_overrides:
   bip32:
