@@ -55,7 +55,7 @@ void main() {
       expect(client.address, addrPath0);
     });
     test('check balance', () async {
-      List balances = await client.getBalance(addrPath0, 'RUNE:RUNE');
+      List balances = await client.getBalance(addrPath0, 'RUNE.RUNE');
       expect(balances.length, 1);
       expect(balances.first['amount'], 0.0);
     });
@@ -70,7 +70,7 @@ void main() {
       expect(client.address, addrPathX);
     });
     test('check balance', () async {
-      List balances = await client.getBalance(addrPathX, 'RUNE:RUNE');
+      List balances = await client.getBalance(addrPathX, 'RUNE.RUNE');
       expect(balances.length, equals(1));
       expect(balances.first['amount'], greaterThan(0.0));
     });
@@ -80,7 +80,7 @@ void main() {
     XChainClient client = new ThorChainClient.readonly(addrPathY);
     test('testnet client balance', () async {
       client.setNetwork('testnet');
-      List balances = await client.getBalance(addrPathY, 'RUNE:RUNE');
+      List balances = await client.getBalance(addrPathY, 'RUNE.RUNE');
       expect(balances.length, equals(1));
       expect(balances.first['amount'], greaterThan(0.0));
     });

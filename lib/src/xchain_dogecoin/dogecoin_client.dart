@@ -54,7 +54,7 @@ class DogecoinClient implements XChainClient {
     if (amountString != null || amountString != '') {
       num amount = double.parse(amountString);
       balances.add({
-        'asset': 'DOGE:DOGE',
+        'asset': 'DOGE.DOGE',
         'amount': amount,
         'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/74.png'
       });

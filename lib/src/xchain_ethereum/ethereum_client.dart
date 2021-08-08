@@ -56,7 +56,7 @@ class EthereumClient implements XChainClient {
     num amount = jsonDecode(responseBody)['ETH']['balance'];
     if (amount != null) {
       balances.add({
-        'asset': 'ETH:ETH',
+        'asset': 'ETH.ETH',
         'amount': amount,
         'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png'
       });
@@ -92,7 +92,7 @@ class EthereumClient implements XChainClient {
 
         if (amount != null) {
           balances.add(
-              {'asset': 'ETH:$symbol', 'amount': amount, 'image': imageUrl});
+              {'asset': 'ETH.$symbol', 'amount': amount, 'image': imageUrl});
         }
       }
     }

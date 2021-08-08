@@ -54,7 +54,7 @@ class BitcoinClient implements XChainClient {
     num amount = (funded - spend) / 100000000;
     if (amount != null) {
       balances.add({
-        'asset': 'BTC:BTC',
+        'asset': 'BTC.BTC',
         'amount': amount,
         'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png'
       });

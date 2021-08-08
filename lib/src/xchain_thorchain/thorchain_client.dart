@@ -50,12 +50,20 @@ class ThorChainClient implements XChainClient {
 
     String responseBody = await networkHelper.getData(uri);
 
-    var bigAmount = jsonDecode(responseBody)['result'][0]['amount'];
-    num amount = int.parse(bigAmount) / 100000000;
-    if (amount != null) {
+    try {
+      var bigAmount = jsonDecode(responseBody)['result'][0]['amount'];
+      num amount = int.parse(bigAmount) / 100000000;
       balances.add({
-        'asset': 'RUNE:RUNE',
+        'asset': 'RUNE.RUNE',
         'amount': amount,
+        'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/4157.png'
+      });
+    } catch (e) {
+      // return 0 balance in case of an empty wallet: [0] does not exist.
+      print(e);
+      balances.add({
+        'asset': 'RUNE.RUNE',
+        'amount': 0.0,
         'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/4157.png'
       });
     }

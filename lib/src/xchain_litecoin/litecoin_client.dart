@@ -53,7 +53,11 @@ class LitecoinClient implements XChainClient {
 
     if (amountString != null || amountString != '') {
       num amount = double.parse(amountString);
-      balances.add({'asset': 'LTC:LTC', 'amount': amount, 'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png'});
+      balances.add({
+        'asset': 'LTC.LTC',
+        'amount': amount,
+        'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png',
+      });
     }
     return balances;
   }

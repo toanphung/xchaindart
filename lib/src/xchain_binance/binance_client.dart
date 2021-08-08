@@ -58,7 +58,7 @@ class BinanceClient implements XChainClient {
 
         if (amount != null) {
           balances.add(
-              {'asset': 'BNB:$symbol', 'amount': amount, 'image': imageUrl});
+              {'asset': 'BNB.$symbol', 'amount': amount, 'image': imageUrl});
         }
       }
     }
@@ -173,7 +173,7 @@ class BinanceClient implements XChainClient {
 
   @override
   setPhrase(mnemonic, walletIndex) {
-    address = "0xEFff51aa65B8AE49a2F2Fe3b941c79bB23Fd0AF4";
+    address = "bnb154hd7fvmv96jl6ch7rcnpftatpyckv2d9yppwf";
     return address;
   }
 

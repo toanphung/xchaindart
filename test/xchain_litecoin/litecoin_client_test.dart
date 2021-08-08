@@ -54,7 +54,7 @@ void main() {
       expect(client.address, addrPath0);
     });
     test('check balance', () async {
-      List balances = await client.getBalance(addrPath0, 'LTC:LTC');
+      List balances = await client.getBalance(addrPath0, 'LTC.LTC');
       expect(balances.length, 1);
       expect(balances.first['amount'], 0.0);
     });
@@ -69,7 +69,7 @@ void main() {
       expect(client.address, addrPathX);
     });
     test('check balance', () async {
-      List balances = await client.getBalance(addrPathX, 'LTC:LTC');
+      List balances = await client.getBalance(addrPathX, 'LTC.LTC');
       expect(balances.length, equals(1));
       expect(balances.first['amount'], 0.12);
     });

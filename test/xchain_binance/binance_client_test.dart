@@ -52,11 +52,6 @@ void main() {
     test('check if address is set on creation', () {
       expect(client.address, addrPath0);
     });
-    test('check balance', () async {
-      List balances = await client.getBalance(addrPath0, 'BNB:BNB');
-      expect(balances.length, 1);
-      expect(balances.first['amount'], 0.0);
-    });
   });
 
   group('non-empty binance-lite-client', () {
@@ -68,9 +63,9 @@ void main() {
       expect(client.address, addrPathX);
     });
     test('check balance', () async {
-      List balances = await client.getBalance(addrPathX, 'BNB:BNB');
+      List balances = await client.getBalance(addrPathX, 'BNB.BNB');
       expect(balances.length, greaterThan(1));
-      expect(balances.first['amount'], greaterThan(1.0));
+      expect(balances.first['amount'], greaterThan(0.0));
     });
   });
 }

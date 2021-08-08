@@ -55,7 +55,7 @@ class BitcoinCashClient implements XChainClient {
     num amount = (funded - spend) / 100000000;
     if (amount != null) {
       balances.add({
-        'asset': 'BCH:BCH',
+        'asset': 'BCH.BCH',
         'amount': amount,
         'image': 'https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png'
       });
