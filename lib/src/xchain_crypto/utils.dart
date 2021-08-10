@@ -26,7 +26,7 @@ substractAddress(String source) {
   if (hasPrefix) {
     RegExp regex2 = RegExp(r'^(.+):(.+)');
     var matches2 = regex2.firstMatch(source);
-    String prefix = matches2!.group(1)!;
+    String prefix = matches2!.group(1)!.toLowerCase();
     if (prefix == 'bitcoin' ||
         prefix == 'bitcoincash' ||
         prefix == 'binance' ||

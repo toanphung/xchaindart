@@ -29,7 +29,17 @@ void main() {
     List<Address> addresses = substractAddress(source);
     expect(addresses.length, 1);
     expect(addresses.first.address, '3QaesQ25kJc4tyCQM5wJ54ky39DNsUMx7Z');
-    expect(addresses.first.asset, 'BTC:BTC');
+    expect(addresses.first.asset, 'BTC.BTC');
+    expect(addresses.first.networkType, 'mainnet');
+  });
+
+  test('starts with bitcoin chain prefix', () {
+    String source = 'BITCOIN:BC1QFPFPW7DLQT3AZCYQXMCUZM5L2XRM6PD6ZVSE9Q';
+    List<Address> addresses = substractAddress(source);
+    expect(addresses.length, 1);
+    expect(
+        addresses.first.address, 'BC1QFPFPW7DLQT3AZCYQXMCUZM5L2XRM6PD6ZVSE9Q');
+    expect(addresses.first.asset, 'BTC.BTC');
     expect(addresses.first.networkType, 'mainnet');
   });
 
@@ -39,7 +49,7 @@ void main() {
     expect(addresses.length, 1);
     expect(
         addresses.first.address, 'qpl4lfjq7emfg8p4akr6p27dap5duj35zcc82aqul5');
-    expect(addresses.first.asset, 'BCH:BCH');
+    expect(addresses.first.asset, 'BCH.BCH');
     expect(addresses.first.networkType, 'mainnet');
   });
 
@@ -48,7 +58,7 @@ void main() {
     List<Address> addresses = substractAddress(source);
     expect(
         addresses.first.address, '0xC52A857FDa38994CB6CC8e0DE2AEDD67a7353e0d');
-    expect(addresses.first.asset, 'ETH:ETH');
+    expect(addresses.first.asset, 'ETH.ETH');
     expect(addresses.first.networkType, 'mainnet');
   });
 
@@ -69,7 +79,7 @@ void main() {
     List<Address> addresses = substractAddress(source);
     expect(
         addresses.first.address, 'bnb1vxyxxkqdke8r55r6fzhprtj8qwgecudj0h5svr');
-    expect(addresses.first.asset, 'BNB:BNB');
+    expect(addresses.first.asset, 'BNB.BNB');
     expect(addresses.first.networkType, 'mainnet');
   });
 
@@ -78,8 +88,8 @@ void main() {
     List<Address> addresses = substractAddress(source);
     expect(addresses.length, 2);
     expect(addresses.first.address, '16we9adsewmBDKv5CSgeRMZPo3RadcgVZV');
-    expect(addresses[0].asset, 'BCH:BCH');
-    expect(addresses[1].asset, 'BTC:BTC');
+    expect(addresses[0].asset, 'BCH.BCH');
+    expect(addresses[1].asset, 'BTC.BTC');
     expect(addresses.first.networkType, 'mainnet');
   });
 
@@ -88,8 +98,8 @@ void main() {
     List<Address> addresses = substractAddress(source);
     expect(addresses.length, 2);
     expect(addresses.first.address, '3QaesQ25kJc4tyCQM5wJ54ky39DNsUMx7Z');
-    expect(addresses[0].asset, 'BTC:BTC');
-    expect(addresses[1].asset, 'LTC:LTC');
+    expect(addresses[0].asset, 'BTC.BTC');
+    expect(addresses[1].asset, 'LTC.LTC');
     expect(addresses.first.networkType, 'mainnet');
   });
 
@@ -99,7 +109,7 @@ void main() {
     expect(addresses.length, 1);
     expect(
         addresses.first.address, 'bc1qfw00pnu77vvw3r8fpterjukx0u3nj26n724pq3');
-    expect(addresses.first.asset, 'BTC:BTC');
+    expect(addresses.first.asset, 'BTC.BTC');
     expect(addresses.first.networkType, 'mainnet');
   });
 
@@ -108,7 +118,7 @@ void main() {
     List<Address> addresses = substractAddress(source);
     expect(
         addresses.first.address, '0xC52A857FDa38994CB6CC8e0DE2AEDD67a7353e0d');
-    expect(addresses.first.asset, 'ETH:ETH');
+    expect(addresses.first.asset, 'ETH.ETH');
     expect(addresses.first.networkType, 'mainnet');
   });
 
