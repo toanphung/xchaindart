@@ -102,60 +102,151 @@ class BitcoinClient implements XChainClient {
   }
 
   @override
-  getTransactionData(txId) {
-    List txData = [
-      {
-        "asset": "ETH.ETH",
-        "from": [
-          {
-            "from": "0xEfse31aa65B8A2R9a2F2Fe3b941c79bB23Fd1BC3",
-            "amount": 100000000,
+  getTransactionData(txId) async {
+    var txData = {};
+
+    String uri = '${getExplorerTransactionUrl(txId)}';
+    NetworkHelper networkHelper = NetworkHelper();
+
+    String responseBody = await networkHelper.getData(uri);
+    var rawTx = jsonDecode(responseBody);
+
+    var epoch = rawTx['status']['block_time'];
+    var date =
+        new DateTime.fromMillisecondsSinceEpoch(epoch * 1000, isUtc: false);
+    var hash = rawTx['status']['block_hash'];
+
+    List<Map> from = [];
+    rawTx['vin'].forEach((tx) {
+      Map txMap = tx;
+      txMap.forEach((key, value) {
+        if (key == 'prevout') {
+          Map prevoutMap = value;
+          late String address;
+          late int amount;
+          prevoutMap.forEach((subkey, subvalue) {
+            if (subkey == 'scriptpubkey_address') {
+              address = subvalue;
+            }
+            if (subkey == 'value') {
+              amount = subvalue;
+            }
+          });
+          if (address.isNotEmpty) {
+            var map = {'address': address, 'amount': amount};
+            from.add(map);
           }
-        ],
-        "to": [
-          {
-            "to": "0xEFff51aa65B8AE49a2F2Fe3b941c79bB23Fd0AF4",
-            "amount": 100000000,
-          }
-        ],
-        "date": "2020-10-04T06:24:36.548Z",
-        "type": "transfer",
-        "hash":
-            "980D9519CCB39DC02F8B0208A4D181125EE8A2678B280AF70666288B62957DAE",
+        }
+      });
+    });
+
+    List<Map> to = [];
+    rawTx['vout'].forEach((tx) {
+      Map txMap = tx;
+      late String address;
+      late int amount;
+      txMap.forEach((key, value) {
+        if (key == 'scriptpubkey_address') {
+          address = value;
+        }
+
+        if (key == 'value') {
+          amount = value;
+        }
+      });
+      if (address.isNotEmpty) {
+        var map = {'address': address, 'amount': amount};
+        to.add(map);
       }
-    ];
+    });
+
+    if (rawTx != null) {
+      txData.addAll({
+        'asset': 'BTC.BTC',
+        'from': from,
+        'to': to,
+        'date': date,
+        'type': "transfer",
+        'hash': hash,
+      });
+    }
     return txData;
   }
 
   @override
-  getTransactions(params) {
-    List transactions = [
-      {
-        "total": 1,
-        "txs": [
-          {
-            "asset": "ETH.ETH",
-            "from": [
-              {
-                "from": "0xEfse31aa65B8A2R9a2F2Fe3b941c79bB23Fd1BC3",
-                "amount": 100000000
+  getTransactions(address, [limit]) async {
+    List txData = [];
+    String uri = '${getExplorerAddressUrl(address)}/txs';
+    NetworkHelper networkHelper = NetworkHelper();
+
+    String responseBody = await networkHelper.getData(uri);
+    List rawTxs = jsonDecode(responseBody);
+
+    if (limit != null) {
+      rawTxs.removeRange(limit, rawTxs.length);
+    }
+
+    for (var rawTx in rawTxs) {
+      var epoch = rawTx['status']['block_time'];
+      var date =
+          new DateTime.fromMillisecondsSinceEpoch(epoch * 1000, isUtc: false);
+      var hash = rawTx['status']['block_hash'];
+
+      List<Map> from = [];
+      rawTx['vin'].forEach((tx) {
+        Map txMap = tx;
+        txMap.forEach((key, value) {
+          if (key == 'prevout') {
+            Map prevoutMap = value;
+            late String address;
+            late int amount;
+            prevoutMap.forEach((subkey, subvalue) {
+              if (subkey == 'scriptpubkey_address') {
+                address = subvalue;
               }
-            ],
-            "to": [
-              {
-                "to": "0xEFff51aa65B8AE49a2F2Fe3b941c79bB23Fd0AF4",
-                "amount": 100000000
+              if (subkey == 'value') {
+                amount = subvalue;
               }
-            ],
-            "date": "2020-10-04T06:24:36.548Z",
-            "type": "transfer",
-            "hash":
-                "980D9519CCB39DC02F8B0208A4D181125EE8A2678B280AF70666288B62957DAE",
+            });
+            if (address.isNotEmpty) {
+              var map = {'address': address, 'amount': amount};
+              from.add(map);
+            }
           }
-        ],
-      }
-    ];
-    return transactions;
+        });
+      });
+
+      List<Map> to = [];
+      rawTx['vout'].forEach((tx) {
+        Map txMap = tx;
+        late String address;
+        late int amount;
+        txMap.forEach((key, value) {
+          if (key == 'scriptpubkey_address') {
+            address = value;
+          }
+
+          if (key == 'value') {
+            amount = value;
+          }
+        });
+        if (address.isNotEmpty) {
+          var map = {'address': address, 'amount': amount};
+          to.add(map);
+        }
+      });
+
+      txData.add({
+        'asset': 'BTC.BTC',
+        'from': from,
+        'to': to,
+        'date': date,
+        'type': "transfer",
+        'hash': hash,
+      });
+    }
+
+    return txData;
   }
 
   @override

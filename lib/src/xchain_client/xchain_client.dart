@@ -22,7 +22,7 @@ abstract class XChainClient {
 
   getTransactionData(txId) {}
 
-  getTransactions(params) {}
+  getTransactions(address, [limit]) {}
 
   purgeClient() {}
 

@@ -1,6 +1,6 @@
 name: xchaindart
 description: Lightweight dart library for cross-chain wallets.
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/DragonsDex/xchaindart
 
 environment:

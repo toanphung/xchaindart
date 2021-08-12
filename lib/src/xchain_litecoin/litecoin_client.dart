@@ -129,7 +129,7 @@ class LitecoinClient implements XChainClient {
   }
 
   @override
-  getTransactions(params) {
+  getTransactions(address, [limit]) {
     List transactions = [
       {
         "total": 1,

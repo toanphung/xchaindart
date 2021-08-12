@@ -75,18 +75,22 @@ void main() {
     });
   });
 
-  // group('non-empty testnet ethereum-lite-client', () {
-  //   XChainClient client = new EthereumClient.readonly(addrPath0, 'testnet');
-  //   test('check if the readOnlyClient flag is set', () {
-  //     expect(client.readOnlyClient, true);
-  //   });
-  //   test('check if address is set on creation', () {
-  //     expect(client.address, addrPath0);
-  //   });
-  //   test('check balance', () async {
-  //     List balances = await client.getBalance(addrPath0, 'ETH:ETH');
-  //     expect(balances.length, greaterThan(1));
-  //     expect(balances.first['amount'], 0.000378);
-  //   });
-  // });
+  group('transaction history', () {
+    XChainClient client = new BitcoinClient.readonly(addrPathX);
+    test('get specific tx history', () async {
+      Map txData = await client.getTransactionData(
+          'b12dd481c49c01c3570672e2a5f72efb2deb74a10a5d27a9cbe4483160fe9565');
+      expect(
+          txData.containsValue(
+              '000000000000000000008d1e5a3c919bcd0db96ce149b88da6f6246b0dab3f12'),
+          true);
+    });
+    test('get all tx history', () async {
+      List transactions = await client.getTransactions(addrPathX, 3);
+      Map tx = transactions.first;
+      bool asset = tx.containsValue('BTC.BTC');
+      expect(asset, true);
+      expect(transactions.length, 3);
+    });
+  });
 }
