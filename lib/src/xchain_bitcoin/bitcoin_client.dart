@@ -111,10 +111,15 @@ class BitcoinClient implements XChainClient {
     String responseBody = await networkHelper.getData(uri);
     var rawTx = jsonDecode(responseBody);
 
-    var epoch = rawTx['status']['block_time'];
-    var date =
-        new DateTime.fromMillisecondsSinceEpoch(epoch * 1000, isUtc: false);
+    var confirmed = rawTx['status']['confirmed'];
     var hash = rawTx['status']['block_hash'];
+    var date = DateTime.now();
+    if (confirmed == true) {
+      var epoch = rawTx['status']['block_time'];
+
+      date =
+          new DateTime.fromMillisecondsSinceEpoch(epoch * 1000, isUtc: false);
+    }
 
     List<Map> from = [];
     rawTx['vin'].forEach((tx) {
@@ -168,6 +173,7 @@ class BitcoinClient implements XChainClient {
         'date': date,
         'type': "transfer",
         'hash': hash,
+        'confirmed': confirmed,
       });
     }
     return txData;
@@ -187,10 +193,15 @@ class BitcoinClient implements XChainClient {
     }
 
     for (var rawTx in rawTxs) {
-      var epoch = rawTx['status']['block_time'];
-      var date =
-          new DateTime.fromMillisecondsSinceEpoch(epoch * 1000, isUtc: false);
+      var confirmed = rawTx['status']['confirmed'];
       var hash = rawTx['status']['block_hash'];
+      var date = DateTime.now();
+      if (confirmed == true) {
+        var epoch = rawTx['status']['block_time'];
+
+        date =
+            new DateTime.fromMillisecondsSinceEpoch(epoch * 1000, isUtc: false);
+      }
 
       List<Map> from = [];
       rawTx['vin'].forEach((tx) {
@@ -243,6 +254,7 @@ class BitcoinClient implements XChainClient {
         'date': date,
         'type': "transfer",
         'hash': hash,
+        'confirmed': confirmed,
       });
     }
 

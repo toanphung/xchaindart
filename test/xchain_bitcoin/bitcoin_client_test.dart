@@ -86,7 +86,8 @@ void main() {
           true);
     });
     test('get all tx history', () async {
-      List transactions = await client.getTransactions(addrPathX, 3);
+      List transactions =
+          await client.getTransactions('35gHuxDkYMEETK5bXCTDen9rCv5dGz3i7Z', 3);
       Map tx = transactions.first;
       bool asset = tx.containsValue('BTC.BTC');
       expect(asset, true);
